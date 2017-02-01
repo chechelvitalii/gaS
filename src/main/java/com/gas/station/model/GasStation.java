@@ -1,13 +1,12 @@
 package com.gas.station.model;
 
 
-import lombok.Getter;
-import lombok.Setter;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "gas_station")
@@ -16,14 +15,14 @@ import javax.persistence.Table;
 public class GasStation {
     @Id
     private int id;
-    @Id
+//    @Id
     private Brand brand;
-    @Column
-    private Fuel fuel;
-    @Column
-    private Service service;
-    @Column
-    private Address address;
+//    @Column
+//    private Fuel fuel;
+//    @Column
+//    private Service service;
+//    @Column
+//    private Address address;
 
 
     enum Brand{
