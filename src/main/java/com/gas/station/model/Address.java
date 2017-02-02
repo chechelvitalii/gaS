@@ -3,10 +3,8 @@ package com.gas.station.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "address")
@@ -15,12 +13,14 @@ import javax.persistence.Table;
 public class Address {
     @Id
     private int id;
-    @Column
+//@Column
+//private GasStation gasStation;
+    @Column(nullable = false)
     private String city;
-    @Column
+    @Column(nullable = false)
     private String street;
-    @Column
+    @Column(nullable = false)
     private double lat;
-    @Column
+    @Column(nullable = false)
     private double lng;
 }

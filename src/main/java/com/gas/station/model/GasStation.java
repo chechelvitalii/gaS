@@ -1,12 +1,12 @@
 package com.gas.station.model;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "gas_station")
@@ -14,18 +14,33 @@ import lombok.Setter;
 @Setter
 public class GasStation {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-//    @Id
+    @Column(name = "inne_id")
+    private int innerId;
+    @Column(nullable = false)
     private Brand brand;
-//    @Column
-//    private Fuel fuel;
-//    @Column
-//    private Service service;
-//    @Column
-//    private Address address;
+    @ManyToMany
+    @JoinTable(
+            name = "gs_fuel",
+            joinColumns = @JoinColumn(name = "gs_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "fuel_id", referencedColumnName = "id")
+    )
+    private List<Fuel> fuels;
+
+    @ManyToMany
+    @JoinTable(
+            name = "gs_service",
+            joinColumns = @JoinColumn(name = "GS_ID", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id", referencedColumnName = "id")
+    )
+    private List<Service> services;
+
+    @OneToOne
+    private Address address;
 
 
-    enum Brand{
+    enum Brand {
         WOG
     }
 }
