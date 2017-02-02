@@ -3,6 +3,7 @@ package com.gas.station.model;
 
 import javax.persistence.*;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,7 @@ import java.util.List;
 public class GasStation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Setter(value = AccessLevel.NONE)
     private int id;
     @Column(name = "inne_id")
     private int innerId;
@@ -38,9 +40,4 @@ public class GasStation {
 
     @OneToOne
     private Address address;
-
-
-    enum Brand {
-        WOG
-    }
 }
