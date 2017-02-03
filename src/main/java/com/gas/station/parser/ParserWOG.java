@@ -1,18 +1,7 @@
 package com.gas.station.parser;
 
 
-import com.gas.station.exception.ParseStreetException;
-import com.gas.station.parser.impl.GasStationParser;
-
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
 
 @Component
 public class ParserWOG {//extends GasStationParser {
