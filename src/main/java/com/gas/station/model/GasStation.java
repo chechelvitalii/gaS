@@ -12,6 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.gas.station.model.enums.BrandType;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,7 +31,7 @@ public class GasStation {
     @Column(name = "inner_id")
     private int innerId;
     @Column(nullable = false)
-    private Brand brand;
+    private BrandType brandType;
     @ManyToMany(mappedBy = "gasStations")
     private List<Fuel> fuels;
     @ManyToMany(mappedBy = "gasStations")

@@ -1,7 +1,7 @@
 package com.gas.station.parser;
 
 import com.gas.station.model.Address;
-import com.gas.station.model.Brand;
+import com.gas.station.model.enums.BrandType;
 import com.gas.station.model.Fuel;
 import com.gas.station.model.GasStation;
 import com.gas.station.model.Service;
@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class GasStationParser<T> {
-    private Brand brand;
+    private BrandType brandType;
 
     @Value("${read.timeout:60000}")
     private int timeOut;
 
-    public GasStationParser(Brand brand) {
-        this.brand = brand;
+    public GasStationParser(BrandType brandType) {
+        this.brandType = brandType;
     }
 
     protected abstract void parseAddress(Address address, T item);
@@ -44,7 +44,7 @@ public abstract class GasStationParser<T> {
                     .fuels(parseFuel(originalGasStation))
                     .services(parseService(originalGasStation))
                     .innerId(parseInnerId(originalGasStation))
-                    .brand(brand)
+                    .brand(brandType)
                     .build();
             parsedGasStations.add(gasStation);
         }

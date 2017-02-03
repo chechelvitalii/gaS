@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
-import static com.gas.station.model.Brand.WOG;
+import static com.gas.station.model.enums.BrandType.WOG;
 import static java.util.stream.Collectors.toList;
 
 public class WogParser extends GasStationParser<Element> {

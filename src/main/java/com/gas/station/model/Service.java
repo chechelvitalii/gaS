@@ -12,6 +12,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.gas.station.model.enums.ServiceType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

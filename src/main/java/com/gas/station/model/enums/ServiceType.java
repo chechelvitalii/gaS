@@ -1,4 +1,4 @@
-package com.gas.station.model;
+package com.gas.station.model.enums;
 
 public enum ServiceType {
     CAFE("WOG cafe"),
