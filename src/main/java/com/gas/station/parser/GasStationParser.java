@@ -22,15 +22,15 @@ public abstract class GasStationParser<T> {
         this.brand = brand;
     }
 
-    public abstract void parseAddress(Address address, T item);
+    protected abstract void parseAddress(Address address, T item);
 
-    public abstract List<Fuel> parseFuel(T item);
+    protected abstract List<Fuel> parseFuel(T item);
 
-    public abstract List<Service> parseService(T item);
+    protected abstract List<Service> parseService(T item);
 
-    public abstract int parseInnerId(T item);
+    protected abstract int parseInnerId(T item);
 
-    public abstract List<T> getOriginalGasStations() throws IOException;
+    protected abstract List<T> getOriginalGasStations() throws IOException;
 
     public List<GasStation> parseGasStations() throws IOException {
         List<GasStation> parsedGasStations = new ArrayList<>();

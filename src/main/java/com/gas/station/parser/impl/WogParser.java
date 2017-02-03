@@ -1,10 +1,11 @@
-package com.gas.station.parser;
+package com.gas.station.parser.impl;
 
 import com.gas.station.exception.ParseStreetException;
 import com.gas.station.model.Address;
 import com.gas.station.model.Fuel;
 import com.gas.station.model.Service;
 
+import com.gas.station.parser.GasStationParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -37,7 +38,7 @@ public class WogParser extends GasStationParser<Element> {
     }
 
     @Override
-    public void parseAddress(Address address, Element item) {
+    protected void parseAddress(Address address, Element item) {
         String lat = item.getElementsByClass(LAT_CLASS).val();
         String lng = item.getElementsByClass(LNG_CLASS).val();
         Element info = item.select(INFO_SELECTOR).first();
@@ -59,12 +60,12 @@ public class WogParser extends GasStationParser<Element> {
     }
 
     @Override
-    public List<Fuel> parseFuel(Element item) {
+    protected List<Fuel> parseFuel(Element item) {
         return null;
     }
 
     @Override
-    public List<Service> parseService(Element item) {
+    protected List<Service> parseService(Element item) {
 //        List<Service> services = new ArrayList<>();
 //        Elements originalServices = originalGasStations.select(SERVICES_SELECTOR);
 //        for (Element originalService : originalServices) {
@@ -76,12 +77,12 @@ public class WogParser extends GasStationParser<Element> {
 
 
     @Override
-    public int parseInnerId(Element item) {
+    protected int parseInnerId(Element item) {
         return Integer.parseInt(item.select(ID_SELECTOR).attr("data-id"));
     }
 
     @Override
-    public List<Element> getOriginalGasStations() throws IOException {
+    protected List<Element> getOriginalGasStations() throws IOException {
         Document domHtml = Jsoup.parse(new URL(gasStationListUrl), timeOut);
         return domHtml.getElementsByClass(ITEM_CLASS);
     }
