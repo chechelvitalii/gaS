@@ -15,6 +15,7 @@ import lombok.Setter;
 public class Address {
     @Id
     private int id;
+    //TODO add reference
 //@Column
 //private GasStation gasStation;
     @Column(nullable = false)

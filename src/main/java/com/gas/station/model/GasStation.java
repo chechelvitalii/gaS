@@ -3,14 +3,7 @@ package com.gas.station.model;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.gas.station.model.enums.BrandType;
 import lombok.AccessLevel;
@@ -32,9 +25,9 @@ public class GasStation {
     private int innerId;
     @Column(nullable = false)
     private BrandType brandType;
-    @ManyToMany(mappedBy = "gasStations")
+    @OneToMany
     private List<Fuel> fuels;
-    @ManyToMany(mappedBy = "gasStations")
+    @OneToMany
     private List<Service> services;
     @OneToOne
     private Address address;

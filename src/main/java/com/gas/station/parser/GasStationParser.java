@@ -44,7 +44,7 @@ public abstract class GasStationParser<T> {
                     .fuels(parseFuel(originalGasStation))
                     .services(parseService(originalGasStation))
                     .innerId(parseInnerId(originalGasStation))
-                    .brand(brandType)
+                    .brandType(brandType)
                     .build();
             parsedGasStations.add(gasStation);
         }
