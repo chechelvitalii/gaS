@@ -1,11 +1,11 @@
-package com.gas.station.parser.impl;
+package com.gas.station.service.parser;
 
 import com.gas.station.exception.ParseStreetException;
 import com.gas.station.model.Address;
 import com.gas.station.model.Fuel;
 import com.gas.station.model.Service;
 
-import com.gas.station.parser.GasStationParser;
+import com.gas.station.service.parser.GasStationParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,6 +20,7 @@ import static java.util.stream.Collectors.toList;
 
 public class WogParser extends GasStationParser<Element> {
 
+    //TODO use path to items NOT CLASS !!!
     private static final String ITEM_CLASS = "driver_map_item";
     private static final String INFO_SELECTOR = "div.info";
     private static final String ID_SELECTOR = "div.info span";
@@ -28,8 +29,9 @@ public class WogParser extends GasStationParser<Element> {
     private static final String SERVICES_SELECTOR = "div.services p";
 
 
+    //TODO make it configurable
     @Value("${wog.station.list:https://wog.ua/ua/map/list/}")
-    private String gasStationListUrl;
+    private String gasStationListUrl = "https://wog.ua/ua/map/list/";
     @Value("${read.timeout:60000}")
     private int timeOut;
 

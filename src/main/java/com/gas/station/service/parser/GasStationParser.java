@@ -1,4 +1,4 @@
-package com.gas.station.parser;
+package com.gas.station.service.parser;
 
 import com.gas.station.model.Address;
 import com.gas.station.model.enums.BrandType;
@@ -6,6 +6,7 @@ import com.gas.station.model.Fuel;
 import com.gas.station.model.GasStation;
 import com.gas.station.model.Service;
 
+import com.google.common.annotations.VisibleForTesting;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
@@ -30,6 +31,7 @@ public abstract class GasStationParser<T> {
 
     protected abstract int parseInnerId(T item);
 
+    @VisibleForTesting
     protected abstract List<T> getOriginalGasStations() throws IOException;
 
     public List<GasStation> parseGasStations() throws IOException {

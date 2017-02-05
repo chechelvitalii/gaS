@@ -1,4 +1,4 @@
-package com.gas.station.parser;
+package com.gas.station.service.parser;
 
 
 import org.springframework.stereotype.Component;
