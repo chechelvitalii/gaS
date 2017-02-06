@@ -23,11 +23,11 @@ public abstract class GasStationParser<T> {
         this.brandType = brandType;
     }
 
-    protected abstract void parseAddress(Address address, T item);
+    protected abstract Address parseAddress(T item);
 
-    protected abstract List<Fuel> parseFuel(T item);
+    protected abstract List<Fuel> parseFuels(T item);
 
-    protected abstract List<Service> parseService(T item);
+    protected abstract List<Service> parseServices(T item);
 
     protected abstract int parseInnerId(T item);
 
@@ -37,14 +37,10 @@ public abstract class GasStationParser<T> {
     public List<GasStation> parseGasStations() throws IOException {
         List<GasStation> parsedGasStations = new ArrayList<>();
         for (T originalGasStation : getOriginalGasStations()) {
-            Address address = new Address();
-
-            parseAddress(address, originalGasStation);
-
             GasStation gasStation = GasStation.builder()
-                    .address(address)
-                    .fuels(parseFuel(originalGasStation))
-                    .services(parseService(originalGasStation))
+                    .address(parseAddress(originalGasStation))
+                    .fuels(parseFuels(originalGasStation))
+                    .services(parseServices(originalGasStation))
                     .innerId(parseInnerId(originalGasStation))
                     .brandType(brandType)
                     .build();

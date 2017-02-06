@@ -38,7 +38,7 @@ public class WogParser extends GasStationParser<Element> {
     }
 
     @Override
-    protected void parseAddress(Address address, Element item) {
+    protected Address parseAddress(Element item) {
         String lat = item.getElementsByClass(LAT_CLASS).val();
         String lng = item.getElementsByClass(LNG_CLASS).val();
         Element info = item.select(INFO_SELECTOR).first();
@@ -51,21 +51,22 @@ public class WogParser extends GasStationParser<Element> {
         if (mayBeStreet.size() != 1) {
             throw new ParseStreetException("Expected one street but found " + mayBeStreet.size());
         }
-
+        Address address = new Address();
         address.setLat(lat);
         address.setLng(lng);
         address.setCity(city);
         address.setStreet(mayBeStreet.get(0));
+        return address;
 
     }
 
     @Override
-    protected List<Fuel> parseFuel(Element item) {
+    protected List<Fuel> parseFuels(Element item) {
         return null;
     }
 
     @Override
-    protected List<Service> parseService(Element item) {
+    protected List<Service> parseServices(Element item) {
 //        List<Service> services = new ArrayList<>();
 //        Elements originalServices = originalGasStations.select(SERVICES_SELECTOR);
 //        for (Element originalService : originalServices) {
