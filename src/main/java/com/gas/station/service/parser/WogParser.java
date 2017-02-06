@@ -5,7 +5,6 @@ import com.gas.station.model.Address;
 import com.gas.station.model.Fuel;
 import com.gas.station.model.Service;
 
-import com.gas.station.service.parser.GasStationParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,8 +19,7 @@ import static java.util.stream.Collectors.toList;
 
 public class WogParser extends GasStationParser<Element> {
 
-    //TODO use path to items NOT CLASS !!!
-    private static final String ITEM_CLASS = "driver_map_item";
+    private static final String ITEM_SELECTOR = "li.driver_map_item";
     private static final String INFO_SELECTOR = "div.info";
     private static final String ID_SELECTOR = "div.info span";
     private static final String LAT_CLASS = "lat";
@@ -86,6 +84,6 @@ public class WogParser extends GasStationParser<Element> {
     @Override
     protected List<Element> getOriginalGasStations() throws IOException {
         Document domHtml = Jsoup.parse(new URL(gasStationListUrl), timeOut);
-        return domHtml.getElementsByClass(ITEM_CLASS);
+        return domHtml.select(ITEM_SELECTOR);
     }
 }

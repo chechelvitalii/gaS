@@ -1,19 +1,17 @@
 package com.gas.station.service.parser;
 
 import com.google.common.io.Resources;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.testng.annotations.DataProvider;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,7 +19,7 @@ import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 
 //TODO parametrise tests
@@ -79,7 +77,7 @@ public class WogParserTest {
         //WHEN
         List<Element> originalGasStations = parser.getOriginalGasStations();
         //THEN
-        assertThat("Count of parsed origin gas station wrong", originalGasStations, hasSize(412));
+        assertThat("Count of parsed origin gas station wrong", originalGasStations, hasSize(411));
     }
 
 }
