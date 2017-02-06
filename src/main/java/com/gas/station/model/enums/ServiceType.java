@@ -1,5 +1,8 @@
 package com.gas.station.model.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum ServiceType {
     CAFE("WOG cafe"),
     SHOP("Магазин"),
@@ -15,5 +18,16 @@ public enum ServiceType {
 
     ServiceType(String name) {
         this.name = name;
+    }
+
+    public static ServiceType getTypeByName(String name) {
+        ServiceType typeByName = null;
+        for (int i = 0; i < values().length; i++) {
+            if (values()[i].getName().equals(name)) {
+                typeByName= values()[i];
+                break;
+            }
+        }
+        return typeByName;
     }
 }

@@ -5,13 +5,16 @@ import com.gas.station.model.Address;
 import com.gas.station.model.Fuel;
 import com.gas.station.model.Service;
 
+import com.gas.station.model.enums.ServiceType;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.gas.station.model.enums.BrandType.WOG;
@@ -67,13 +70,14 @@ public class WogParser extends GasStationParser<Element> {
 
     @Override
     protected List<Service> parseServices(Element item) {
-//        List<Service> services = new ArrayList<>();
-//        Elements originalServices = originalGasStations.select(SERVICES_SELECTOR);
-//        for (Element originalService : originalServices) {
-//            Service service = Service.builder()
-//                    .type(ServiceType.valueOf(originalGasStations.text()))
-//                    .
-        return null;
+        List<Service> services = new ArrayList<>();
+        Elements originalServices = item.select(SERVICES_SELECTOR);
+        for (Element originalService : originalServices) {
+            Service service = new Service();
+            service.setType(ServiceType.getTypeByName(originalService.text()));
+            services.add(service);
+        }
+        return services;
     }
 
 

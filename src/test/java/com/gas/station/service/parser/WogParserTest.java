@@ -3,8 +3,9 @@ package com.gas.station.service.parser;
 import com.gas.station.model.Address;
 import com.gas.station.model.Fuel;
 import com.gas.station.model.GasStation;
+import com.gas.station.model.Service;
+import com.gas.station.model.enums.ServiceType;
 import com.google.common.io.Resources;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -22,8 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 
@@ -83,11 +83,38 @@ public class WogParserTest {
     }
 
     @Test
-    public void pshouldSuccessfullyParseServices() throws Exception {
-//        for (Element element : parser.getOriginalGasStations()) {
-//            List<Service> services = parser.parseServices(element);
-//            assertFalse(services.isEmpty());
-//        }
+    public void shouldSuccessfullyParseServices() throws Exception {
+        //GIVEN
+        PowerMockito.when(Jsoup.parse(any(URL.class), any(Integer.class))).thenReturn(testDomHtml);
+        //WHEN
+        List<Service> services = new ArrayList<>();
+        for (Element element : parser.getOriginalGasStations()) {
+            services.addAll(parser.parseServices(element));
+        }
+        //THEN
+        assertThat(services, hasSize(5));
+        assertThat(services, containsInAnyOrder(getTesServices().toArray()));
+    }
+
+    private List<Service> getTesServices() {
+        List<Service> testServices = new ArrayList<>();
+        Service tel = new Service();
+        tel.setType(ServiceType.PHONE);
+        Service coupon = new Service();
+        coupon.setType(ServiceType.COUPONS);
+        Service creditCard = new Service();
+        creditCard.setType(ServiceType.CREDIT_CARDS);
+        Service fuelCard = new Service();
+        fuelCard.setType(ServiceType.FUEL_CARDS);
+        Service insurance = new Service();
+        insurance.setType(ServiceType.INSURANCE);
+
+        testServices.add(tel);
+        testServices.add(coupon);
+        testServices.add(creditCard);
+        testServices.add(fuelCard);
+        testServices.add(insurance);
+        return testServices;
     }
 
     @Test
@@ -126,7 +153,7 @@ public class WogParserTest {
         assertThat("Count of parsed origin gas station wrong", originalGasStations, hasSize(WOG_STATION_COUNT));
     }
 
-    private List<Fuel> getTestFuelList(){
+    private List<Fuel> getTestFuelList() {
         List<Fuel> fuels = new ArrayList<>();
 
 
