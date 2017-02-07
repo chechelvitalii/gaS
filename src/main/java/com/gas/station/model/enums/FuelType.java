@@ -21,7 +21,7 @@ public enum FuelType {
         this.name = name;
     }
 
-    public static FuelType getTypeByName(String name) {
+    public static FuelType getFuelTypeByName(String name) {
         Optional<FuelType> typeByName = Optional.empty();
         for (int i = 0; i < values().length; i++) {
             if (values()[i].getName().equals(name)) {

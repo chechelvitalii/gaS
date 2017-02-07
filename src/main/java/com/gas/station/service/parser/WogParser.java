@@ -14,11 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import static com.gas.station.model.enums.BrandType.WOG;
 import static java.util.stream.Collectors.toList;
@@ -77,7 +74,7 @@ public class WogParser extends GasStationParser<Element> {
                 .text();
         return Arrays.stream(fuelBlock.split(FUEL_SEPARATOR))
                 .map(String::trim)
-                .map(fuelName -> FuelType.getTypeByName(fuelName))
+                .map(fuelName -> FuelType.getFuelTypeByName(fuelName))
                 .map(fuelType -> new Fuel(fuelType))
                 .collect(toList());
     }
