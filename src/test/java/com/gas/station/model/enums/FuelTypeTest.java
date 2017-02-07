@@ -1,14 +1,21 @@
 package com.gas.station.model.enums;
 
 import com.gas.station.exception.ConvertTypeException;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
+import static com.gas.station.exception.ConvertTypeException.message;
 import static com.gas.station.model.enums.FuelType.A_95;
 import static com.gas.station.model.enums.FuelType.getFuelTypeByName;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class FuelTypeTest {
+
+    @Rule
+    public ExpectedException exceptions = ExpectedException.none();
+
     @Test
     public void shouldSuccessfullyGetFuelTypeByName() throws Exception {
         //GIVEN
@@ -16,13 +23,16 @@ public class FuelTypeTest {
         //WHEN
         FuelType fuelType = FuelType.getFuelTypeByName(name);
         //THEN
-        assertThat(fuelType,is(A_95));
+        assertThat(fuelType, is(A_95));
     }
 
-    @Test(expected = ConvertTypeException.class)
+    @Test
     public void shouldThrowExceptionIfCantGetFuelTypeByName() throws Exception {
         //GIVEN
         String name = "A-10050";
+        //THEN
+        exceptions.expect(ConvertTypeException.class);
+        exceptions.expectMessage(message + name);
         //WHEN
         FuelType fuelType = getFuelTypeByName(name);
     }
