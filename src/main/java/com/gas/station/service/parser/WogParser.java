@@ -1,10 +1,10 @@
 package com.gas.station.service.parser;
 
-import com.gas.station.exception.ParseStreetException;
+import com.gas.station.exception.ElementParseException;
 import com.gas.station.model.Address;
 import com.gas.station.model.Fuel;
 import com.gas.station.model.Service;
-
+import com.gas.station.model.enums.FuelType;
 import com.gas.station.model.enums.ServiceType;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,7 +15,10 @@ import org.springframework.beans.factory.annotation.Value;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static com.gas.station.model.enums.BrandType.WOG;
 import static java.util.stream.Collectors.toList;
@@ -25,9 +28,11 @@ public class WogParser extends GasStationParser<Element> {
     private static final String ITEM_SELECTOR = "li.driver_map_item";
     private static final String INFO_SELECTOR = "div.info";
     private static final String ID_SELECTOR = "div.info span";
+    private static final String SERVICES_SELECTOR = "div.services p";
     private static final String LAT_CLASS = "lat";
     private static final String LNG_CLASS = "lng";
-    private static final String SERVICES_SELECTOR = "div.services p";
+    private static final String FUELS_CLASS = "fuels";
+    private static final String FUEL_SEPARATOR = ",";
 
 
     //TODO make it configurable
@@ -52,7 +57,7 @@ public class WogParser extends GasStationParser<Element> {
                 .filter(text -> !text.isEmpty())
                 .collect(toList());
         if (mayBeStreet.size() != 1) {
-            throw new ParseStreetException("Expected one street but found " + mayBeStreet.size());
+            throw new ElementParseException("Can't parse street:" + mayBeStreet);
         }
         Address address = new Address();
         address.setLat(lat);
@@ -65,19 +70,24 @@ public class WogParser extends GasStationParser<Element> {
 
     @Override
     protected List<Fuel> parseFuels(Element item) {
-        return null;
+        //A-95, 92 MUSTANG, ДП MUSTANG, ДП MUSTANG+
+        String fuelBlock = item.getElementsByClass(FUELS_CLASS).stream()
+                .findFirst()
+                .orElseThrow(() -> new ElementParseException("Not found class=fuels in parse element"))
+                .text();
+        return Arrays.stream(fuelBlock.split(FUEL_SEPARATOR))
+                .map(String::trim)
+                .map(fuelName -> FuelType.getTypeByName(fuelName))
+                .map(fuelType -> new Fuel(fuelType))
+                .collect(toList());
     }
 
     @Override
     protected List<Service> parseServices(Element item) {
-        List<Service> services = new ArrayList<>();
         Elements originalServices = item.select(SERVICES_SELECTOR);
-        for (Element originalService : originalServices) {
-            Service service = new Service();
-            service.setType(ServiceType.getTypeByName(originalService.text()));
-            services.add(service);
-        }
-        return services;
+        return originalServices.stream()
+                .map(element -> new Service(ServiceType.getTypeByName(element.text())))
+                .collect(toList());
     }
 
 

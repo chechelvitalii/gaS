@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,9 +13,10 @@ import lombok.Setter;
 @Table(name = "address")
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Address {
-    @Id
-    private int id;
+//    @Id
+//    private int id;
     //TODO add reference
 //@Column
 //private GasStation gasStation;

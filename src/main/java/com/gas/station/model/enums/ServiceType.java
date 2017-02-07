@@ -1,6 +1,9 @@
 package com.gas.station.model.enums;
 
+import com.gas.station.exception.ConvertTypeException;
 import lombok.Getter;
+
+import java.util.Optional;
 
 @Getter
 public enum ServiceType {
@@ -21,13 +24,14 @@ public enum ServiceType {
     }
 
     public static ServiceType getTypeByName(String name) {
-        ServiceType typeByName = null;
+        Optional<ServiceType> typeByName = Optional.empty();
         for (int i = 0; i < values().length; i++) {
             if (values()[i].getName().equals(name)) {
-                typeByName= values()[i];
+                typeByName = Optional.of(values()[i]);
                 break;
             }
         }
-        return typeByName;
+        return typeByName
+                .orElseThrow(() -> new ConvertTypeException(name));
     }
 }

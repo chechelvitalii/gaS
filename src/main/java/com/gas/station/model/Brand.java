@@ -1,22 +1,24 @@
 package com.gas.station.model;
 
 import com.gas.station.model.enums.BrandType;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "brand")
 @Getter
+@Setter
+@EqualsAndHashCode
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Setter(value = AccessLevel.NONE)
     private int id;
 
-    @Setter
+    @NonNull
     @Enumerated
     @Column(nullable = false)
     private BrandType type;

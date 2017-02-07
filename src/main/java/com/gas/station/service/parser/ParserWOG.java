@@ -33,7 +33,7 @@ public class ParserWOG {//extends GasStationParser {
 //                    .filter(text -> !text.isEmpty())
 //                    .collect(toList());
 //            if (mayBeStreet.size() != 1) {
-//                throw new ParseStreetException("Expected one street but found " + mayBeStreet.size());
+//                throw new ElementParseException("Expected one street but found " + mayBeStreet.size());
 //            }
 //            String street = mayBeStreet.get(0);
 //            String town = info.select("h3").text();

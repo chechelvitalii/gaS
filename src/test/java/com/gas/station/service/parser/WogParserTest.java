@@ -4,6 +4,7 @@ import com.gas.station.model.Address;
 import com.gas.station.model.Fuel;
 import com.gas.station.model.GasStation;
 import com.gas.station.model.Service;
+import com.gas.station.model.enums.FuelType;
 import com.gas.station.model.enums.ServiceType;
 import com.google.common.io.Resources;
 import org.jsoup.Jsoup;
@@ -20,12 +21,16 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import static com.gas.station.model.enums.ServiceType.*;
+import static com.gas.station.model.enums.ServiceType.PHONE;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.refEq;
 
 //TODO parametrise tests
 @RunWith(PowerMockRunner.class)
@@ -57,16 +62,17 @@ public class WogParserTest {
     }
 
     @Test
-    public void shouldSuccessfullyParseCountAddress() throws Exception {
+    public void shouldSuccessfullyParseAddress() throws Exception {
         //GIVEN
-        PowerMockito.when(Jsoup.parse(any(URL.class), any(Integer.class))).thenReturn(fullDomHtml);
+        PowerMockito.when(Jsoup.parse(any(URL.class), any(Integer.class))).thenReturn(testDomHtml);
         //WHEN
         List<Address> addresses = new ArrayList<>();
         for (Element element : parser.getOriginalGasStations()) {
             addresses.add(parser.parseAddress(element));
         }
         //THEN
-        assertThat(addresses, hasSize(WOG_STATION_COUNT));
+        assertThat(addresses, hasSize(1));
+        assertThat(addresses, hasItem(getTestAddress()));
     }
 
     @Test
@@ -96,27 +102,6 @@ public class WogParserTest {
         assertThat(services, containsInAnyOrder(getTesServices().toArray()));
     }
 
-    private List<Service> getTesServices() {
-        List<Service> testServices = new ArrayList<>();
-        Service tel = new Service();
-        tel.setType(ServiceType.PHONE);
-        Service coupon = new Service();
-        coupon.setType(ServiceType.COUPONS);
-        Service creditCard = new Service();
-        creditCard.setType(ServiceType.CREDIT_CARDS);
-        Service fuelCard = new Service();
-        fuelCard.setType(ServiceType.FUEL_CARDS);
-        Service insurance = new Service();
-        insurance.setType(ServiceType.INSURANCE);
-
-        testServices.add(tel);
-        testServices.add(coupon);
-        testServices.add(creditCard);
-        testServices.add(fuelCard);
-        testServices.add(insurance);
-        return testServices;
-    }
-
     @Test
     public void shouldSuccessfullyParseInnerIds() throws Exception {
         //GIVEN
@@ -131,7 +116,6 @@ public class WogParserTest {
         assertThat(innerIds, hasItem(TEST_INNER_ID));
     }
 
-
     @Test
     public void shouldSuccessfullyParseGasStations() throws Exception {
         //GIVEN
@@ -140,8 +124,8 @@ public class WogParserTest {
         List<GasStation> gasStations = parser.parseGasStations();
         //THEN
         assertThat(gasStations, hasSize(WOG_STATION_COUNT));
-
     }
+
 
     @Test
     public void shouldReturnOriginalGasStations() throws Exception {
@@ -155,8 +139,34 @@ public class WogParserTest {
 
     private List<Fuel> getTestFuelList() {
         List<Fuel> fuels = new ArrayList<>();
-
-
+        Fuel a95 = new Fuel();
+        a95.setType(FuelType.A_95);
+        Fuel mustang95 = new Fuel();
+        mustang95.setType(FuelType.MUSTANG_95);
+        Fuel mustangDt= new Fuel();
+        mustangDt.setType(FuelType.MUSTANG_DT);
+        Fuel mustangDtPlus= new Fuel();
+        mustangDtPlus.setType(FuelType.MUSTANG_DT_PLUS);
+        fuels.addAll(Arrays.asList(a95, mustang95, mustangDt, mustangDtPlus));
         return fuels;
+    }
+
+    private Address getTestAddress() {
+        Address testAddress = new Address();
+        testAddress.setCity("м. Луцьк");
+        testAddress.setStreet("Конякіна 22");
+        testAddress.setLat("50.76532");
+        testAddress.setLng("25.355281");
+        return testAddress;
+    }
+
+    private List<Service> getTesServices() {
+        return Arrays.asList(
+                new Service(PHONE),
+                new Service(COUPONS),
+                new Service(CREDIT_CARDS),
+                new Service(FUEL_CARDS),
+                new Service(INSURANCE)
+        );
     }
 }

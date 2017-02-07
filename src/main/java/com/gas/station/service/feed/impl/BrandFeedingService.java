@@ -24,9 +24,7 @@ public class BrandFeedingService extends FeedingService<BrandType> {
     public int feed() {
         List<Brand> brandsForSave = new ArrayList<>();
         for (BrandType brandType : dataFeed) {
-            Brand newBrand = new Brand();
-            newBrand.setType(brandType);
-            brandsForSave.add(newBrand);
+            brandsForSave.add(new Brand(brandType));
         }
         repository.save(brandsForSave);
         return brandsForSave.size();

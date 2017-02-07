@@ -24,9 +24,7 @@ public class ServiceFeedingService extends FeedingService<ServiceType> {
     public int feed() {
         List<Service> servicesForSave = new ArrayList<>();
         for (ServiceType serviceType : dataFeed) {
-            Service newService = new Service();
-            newService.setType(serviceType);
-            servicesForSave.add(newService);
+            servicesForSave.add(new Service(serviceType));
         }
         repository.save(servicesForSave);
         return servicesForSave.size();
