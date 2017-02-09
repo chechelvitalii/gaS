@@ -5,18 +5,20 @@ import com.gas.station.model.GasStation;
 import com.gas.station.model.enums.BrandType;
 import com.gas.station.repository.GasStationRepository;
 
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
 
 import java.util.List;
 
-@SpringBootApplication
-public class GasStationApplication {
+import lombok.extern.log4j.Log4j;
 
-    private static final org.slf4j.Logger log = LoggerFactory.getLogger(GasStationApplication.class);
+@Log4j
+@SpringBootApplication
+@PropertySource(value = "log4j.properties")
+public class GasStationApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(GasStationApplication.class, args);
