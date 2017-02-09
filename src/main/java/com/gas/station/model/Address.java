@@ -1,16 +1,13 @@
 package com.gas.station.model;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.Embeddable;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
-@Table(name = "address")
+@Embeddable
 @Getter
 @Setter
 @EqualsAndHashCode
