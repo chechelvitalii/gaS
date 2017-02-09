@@ -1,0 +1,77 @@
+app:
+  prop:
+    read:
+      timeout: 60000
+
+spring:
+  h2:
+    console:
+      enabled: true
+#Data Source with Log4JDBC
+  datasource:
+    url: jdbc:log4jdbc:h2:mem:GS;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: net.sf.log4jdbc.DriverSpy
+    data-username: sa
+    data-password:
+#Data Source original
+#  datasource:
+#    url: jdbc:h2:mem:GS;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+#    driver-class-name: org.h2.Driver
+#    data-username: sa
+#    data-password:
+  jpa:
+    properties:
+     hibernate:
+      enable_lazy_load_no_trans: true
+      format_sql: true
+#    database-platform: H2
+#    show-sql: true
+server:
+  port: 7775
+
+Configutation:
+  name: Default
+
+  Properties:
+    Property:
+      name: log-path
+      value: "D:"
+
+  Appenders:
+
+    Console:
+      name: Console_Appender
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+
+    File:
+      name: File_Appender
+      fileName: ${log-path}/logfile.log
+      PatternLayout:
+        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+
+  Loggers:
+
+      Root:
+        level: debug
+        AppenderRef:
+          - ref: Console_Appender
+
+      Logger:
+        - name: guru.springframework.blog.log4j2yaml
+          level: debug
+          AppenderRef:
+            - ref: File_Appender
+              level: error
+
+#logging:
+#  file: D:/application.log
+#  level:
+#    root: info
+#  pattern:
+#    console: "%d{yyyy-MM-dd HH:mm:ss} %-5p %c:%L - %m%n"
+#    file: "%d{yyyy-MM-dd HH:mm:ss} %-5p %c:%L - %m%n"
+
+
+#com.gas.station
