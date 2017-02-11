@@ -4,20 +4,21 @@ import com.gas.station.model.Address;
 import com.gas.station.model.GasStation;
 import com.gas.station.model.enums.BrandType;
 import com.gas.station.repository.GasStationRepository;
-
+import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
 
 import java.util.List;
 
-import lombok.extern.log4j.Log4j;
-
-@Log4j
+@Log4j2
 @SpringBootApplication
-@PropertySource(value = "log4j.properties")
 public class GasStationApplication {
 
     public static void main(String[] args) {
