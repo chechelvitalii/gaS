@@ -5,14 +5,7 @@ import com.gas.station.model.enums.BrandType;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -41,7 +34,10 @@ public class GasStation {
     private BrandType brandType;
     @OneToMany
     private List<Fuel> fuels;
-    @OneToMany
+    @ManyToMany
+    @JoinTable(name = "gas_station_services",
+            joinColumns = @JoinColumn(name = "gas_station_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id"))
     private List<Service> services;
     @Embedded
     private Address address;

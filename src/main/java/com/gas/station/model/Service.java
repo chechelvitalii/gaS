@@ -4,6 +4,7 @@ import com.gas.station.model.enums.ServiceType;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "service")
@@ -22,4 +23,7 @@ public class Service {
     @Enumerated
     @Column(nullable = false)
     private ServiceType type;
+
+    @ManyToMany(mappedBy = "services")
+    private List<GasStation> stations;
 }
