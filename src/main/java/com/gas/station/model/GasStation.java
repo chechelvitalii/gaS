@@ -32,7 +32,10 @@ public class GasStation {
     private int innerId;
     @Column(nullable = false)
     private BrandType brandType;
-    @OneToMany
+    @ManyToMany
+    @JoinTable(name = "gas_station_fuels",
+            joinColumns = @JoinColumn(name = "gas_station_id"),
+            inverseJoinColumns = @JoinColumn(name = "fuel_id"))
     private List<Fuel> fuels;
     @ManyToMany
     @JoinTable(name = "gas_station_services",

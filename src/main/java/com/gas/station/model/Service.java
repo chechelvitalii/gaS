@@ -19,11 +19,12 @@ public class Service {
     @Setter(value = AccessLevel.NONE)
     private int id;
 
+    @ManyToMany(mappedBy = "services")
+    private List<GasStation> stations;
+
     @NonNull
     @Enumerated
     @Column(nullable = false)
     private ServiceType type;
 
-    @ManyToMany(mappedBy = "services")
-    private List<GasStation> stations;
 }
