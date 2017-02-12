@@ -28,4 +28,4 @@ spring:
       enable_lazy_load_no_trans: true
       format_sql: true
 #    database-platform: H2
-#    show-sql: true
+#      show-sql: true
