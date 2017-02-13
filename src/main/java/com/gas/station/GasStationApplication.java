@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
@@ -29,6 +30,10 @@ public class GasStationApplication {
         SpringApplication.run(GasStationApplication.class, args);
     }
 
+    @Bean
+    public RestTemplate restTemplate(){
+        return new RestTemplate();
+    }
     @Bean
     public CommandLineRunner demo(GasStationRepository gasStationRepository) {
         return (args) -> {

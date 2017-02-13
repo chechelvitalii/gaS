@@ -6,20 +6,27 @@ import com.gas.station.model.Fuel;
 import com.gas.station.model.Service;
 import com.gas.station.model.enums.FuelType;
 import com.gas.station.model.enums.ServiceType;
+import lombok.extern.log4j.Log4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static com.gas.station.model.enums.BrandType.WOG;
 import static java.util.stream.Collectors.toList;
 
+@Log4j
+@Component
 public class WogParser extends GasStationParser<Element> {
 
     private static final String ITEM_SELECTOR = "li.driver_map_item";
@@ -30,11 +37,22 @@ public class WogParser extends GasStationParser<Element> {
     private static final String LNG_CLASS = "lng";
     private static final String FUELS_CLASS = "fuels";
     private static final String FUEL_SEPARATOR = ",";
+    private static final String FUELS_AND_PRICES = "div#cost.map_pane.act ul.map_cost_list li";
 
+    private static final String STATION_ID = "STATION_ID";
+    private static final String PRICE = "price";
+    private static final String IMG_LOGO = "span.cost_img_container span.cost_img_container_inner img.logo";
+    private static final String SRC = "src";
+
+    @Autowired
+    private RestTemplate restClient;
 
     //TODO make it configurable
     @Value("${wog.station.list:https://wog.ua/ua/map/list/}")
     private String gasStationListUrl = "https://wog.ua/ua/map/list/";
+    //TODO make it configurable
+    @Value("${wog.station.fuelPrices.and.services:https://wog.ua/drivers/get-gaz-station-detail}")
+    private String gasStationFuelPricesUrl = "https://wog.ua/drivers/get-gaz-station-detail";
     @Value("${read.timeout:60000}")
     private int timeOut;
 
@@ -67,6 +85,9 @@ public class WogParser extends GasStationParser<Element> {
 
     @Override
     protected List<Fuel> parseFuels(Element item) {
+        //TODO read prices from thi map
+        Map<String, String> fuelPrices = getFuelPrices(parseInnerId(item));
+
         //A-95, 92 MUSTANG, ДП MUSTANG, ДП MUSTANG+
         String fuelBlock = item.getElementsByClass(FUELS_CLASS).stream()
                 .findFirst()
@@ -77,6 +98,22 @@ public class WogParser extends GasStationParser<Element> {
                 .map(fuelName -> FuelType.getFuelTypeByName(fuelName))
                 .map(fuelType -> new Fuel(fuelType))
                 .collect(toList());
+    }
+
+    private Map<String, String> getFuelPrices(int id) {
+        Map<String, String> fuelAndPrices = new HashMap<>();
+        MultiValueMap<String, Object> uriVars = new LinkedMultiValueMap();
+        uriVars.put(STATION_ID, Collections.singletonList(id));
+        String fuelPricesHtml = restClient.postForObject(gasStationFuelPricesUrl, uriVars, String.class);
+
+        Document fuelPricesDomHtml = Jsoup.parse(fuelPricesHtml);
+        for (Element fuelAndPrice : fuelPricesDomHtml.select(FUELS_AND_PRICES)) {
+            String price = fuelAndPrice.getElementsByClass(PRICE).text();
+            String imgLogo = fuelAndPrice.select(IMG_LOGO).attr(SRC);
+            log.info("Price:"+price+", ImgLogo:"+imgLogo);
+
+        }
+        return fuelAndPrices;
     }
 
     @Override

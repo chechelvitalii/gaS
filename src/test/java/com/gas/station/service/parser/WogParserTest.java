@@ -5,7 +5,6 @@ import com.gas.station.model.Fuel;
 import com.gas.station.model.GasStation;
 import com.gas.station.model.Service;
 import com.gas.station.model.enums.FuelType;
-import com.gas.station.model.enums.ServiceType;
 import com.google.common.io.Resources;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,10 +12,12 @@ import org.jsoup.nodes.Element;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.net.URL;
@@ -30,9 +31,8 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.refEq;
+import static org.mockito.Mockito.when;
 
-//TODO parametrise tests
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Jsoup.class)
 public class WogParserTest {
@@ -41,9 +41,14 @@ public class WogParserTest {
     private static final int WOG_STATION_COUNT = 411;
 
     private static final String WOG_TEST_LIST_RESOURCE_PATH = "/wog/wogTestList.html";
-    public static final Integer TEST_INNER_ID = 51157;
+    private static final Integer TEST_INNER_ID = 51157;
+
+    private static final String WOG_FUEL_AND_PRICES_RESOURCE_PATH = "/wog/fuelAndPrices.html";
+
+    @InjectMocks
+    private WogParser parser;
     @Mock
-    private WogParser parser = new WogParser();
+    private RestTemplate restClient;
 
     private Document fullDomHtml;
     private Document testDomHtml;
@@ -59,6 +64,10 @@ public class WogParserTest {
         testDomHtml = Jsoup.parse(testHtml);
 
         PowerMockito.mockStatic(Jsoup.class);
+
+        URL fuelAndPricesResource = getClass().getResource(WOG_FUEL_AND_PRICES_RESOURCE_PATH);
+        String fuelAndPricesHtml = Resources.toString(resource, UTF_8);
+        when(restClient.postForObject(any(), any(), any())).thenReturn(fuelAndPricesHtml);
     }
 
     @Test
@@ -143,9 +152,9 @@ public class WogParserTest {
         a95.setType(FuelType.A_95);
         Fuel mustang95 = new Fuel();
         mustang95.setType(FuelType.MUSTANG_95);
-        Fuel mustangDt= new Fuel();
+        Fuel mustangDt = new Fuel();
         mustangDt.setType(FuelType.MUSTANG_DT);
-        Fuel mustangDtPlus= new Fuel();
+        Fuel mustangDtPlus = new Fuel();
         mustangDtPlus.setType(FuelType.MUSTANG_DT_PLUS);
         fuels.addAll(Arrays.asList(a95, mustang95, mustangDt, mustangDtPlus));
         return fuels;
