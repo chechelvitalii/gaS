@@ -2,46 +2,44 @@ package com.gas.station.service.parser;
 
 import com.gas.station.model.Address;
 import com.gas.station.model.Fuel;
-import com.gas.station.model.GasStation;
 import com.gas.station.model.Service;
-import com.gas.station.model.enums.FuelType;
 import com.google.common.io.Resources;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.gas.station.model.enums.FuelType.*;
 import static com.gas.station.model.enums.ServiceType.*;
-import static com.gas.station.model.enums.ServiceType.PHONE;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.anyString;
+import static org.powermock.api.mockito.PowerMockito.when;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest(Jsoup.class)
+@RunWith(SpringRunner.class)
 public class WogParserTest {
 
     private static final String WOG_FULL_LIST_RESOURCE_PATH = "/wog/wogFullList.html";
     private static final int WOG_STATION_COUNT = 411;
 
-    private static final String WOG_TEST_LIST_RESOURCE_PATH = "/wog/wogTestList.html";
-    private static final Integer TEST_INNER_ID = 51157;
+    private static final String LIST_WITH_ONE_GAS_STATION_RESOURCE_PATH = "/wog/listWithOneGasStation.html";
+    private static final Integer TESTED_INNER_ID = 51573;
 
     private static final String WOG_FUEL_AND_PRICES_RESOURCE_PATH = "/wog/fuelAndPrices.html";
 
@@ -49,115 +47,98 @@ public class WogParserTest {
     private WogParser parser;
     @Mock
     private RestTemplate restClient;
+    //TODO it should be IT
+//    private Document fullDomHtml;
 
-    private Document fullDomHtml;
-    private Document testDomHtml;
+    Elements originalGasStationsElements;
+
 
     @Before
     public void setUP() throws IOException {
-        URL resource = getClass().getResource(WOG_FULL_LIST_RESOURCE_PATH);
-        String fullHtml = Resources.toString(resource, UTF_8);
-        fullDomHtml = Jsoup.parse(fullHtml);
+//        URL resource = getClass().getResource(WOG_FULL_LIST_RESOURCE_PATH);
+//        String fullHtml = Resources.toString(resource, UTF_8);
+//        fullDomHtml = Jsoup.parse(fullHtml);
 
-        URL testResource = getClass().getResource(WOG_TEST_LIST_RESOURCE_PATH);
-        String testHtml = Resources.toString(testResource, UTF_8);
-        testDomHtml = Jsoup.parse(testHtml);
+
+        Document domWithOneGasStation = Jsoup.parse(getHtmlByPath(LIST_WITH_ONE_GAS_STATION_RESOURCE_PATH));
+        originalGasStationsElements = domWithOneGasStation.select(WogParser.ITEM_SELECTOR);
+
 
         PowerMockito.mockStatic(Jsoup.class);
 
-        URL fuelAndPricesResource = getClass().getResource(WOG_FUEL_AND_PRICES_RESOURCE_PATH);
-        String fuelAndPricesHtml = Resources.toString(resource, UTF_8);
-        when(restClient.postForObject(any(), any(), any())).thenReturn(fuelAndPricesHtml);
     }
 
     @Test
     public void shouldSuccessfullyParseAddress() throws Exception {
         //GIVEN
-        PowerMockito.when(Jsoup.parse(any(URL.class), any(Integer.class))).thenReturn(testDomHtml);
+        Element originalGasStations = originalGasStationsElements.get(0);
         //WHEN
-        List<Address> addresses = new ArrayList<>();
-        for (Element element : parser.getOriginalGasStations()) {
-            addresses.add(parser.parseAddress(element));
-        }
+        Address address = parser.parseAddress(originalGasStations);
         //THEN
-        assertThat(addresses, hasSize(1));
-        assertThat(addresses, hasItem(getTestAddress()));
+        assertThat(address, is(getTestAddress()));
     }
 
     @Test
     public void shouldSuccessfullyParseFuels() throws Exception {
         //GIVEN
-        PowerMockito.when(Jsoup.parse(any(URL.class), any(Integer.class))).thenReturn(testDomHtml);
+        Element originalGasStations = originalGasStationsElements.get(0);
+        when(restClient.postForObject(anyString(), any(LinkedMultiValueMap.class), any(Class.class)))
+                .thenReturn(getHtmlByPath(WOG_FUEL_AND_PRICES_RESOURCE_PATH));
         //WHEN
-        List<Fuel> fuels = new ArrayList<>();
-        for (Element element : parser.getOriginalGasStations()) {
-            fuels.addAll(parser.parseFuels(element));
-        }
+        List<Fuel> fuels = parser.parseFuels(originalGasStations);
         //THEN
         assertThat(fuels, hasSize(4));
+        assertThat(fuels, contains(getTestFuels().toArray()));
     }
 
     @Test
     public void shouldSuccessfullyParseServices() throws Exception {
         //GIVEN
-        PowerMockito.when(Jsoup.parse(any(URL.class), any(Integer.class))).thenReturn(testDomHtml);
+        Element originalGasStations = originalGasStationsElements.get(0);
         //WHEN
-        List<Service> services = new ArrayList<>();
-        for (Element element : parser.getOriginalGasStations()) {
-            services.addAll(parser.parseServices(element));
-        }
+        List<Service> services = parser.parseServices(originalGasStations);
         //THEN
         assertThat(services, hasSize(5));
-        assertThat(services, containsInAnyOrder(getTesServices().toArray()));
+        assertThat(services, contains(getTesServices().toArray()));
     }
 
     @Test
     public void shouldSuccessfullyParseInnerIds() throws Exception {
         //GIVEN
-        PowerMockito.when(Jsoup.parse(any(URL.class), any(Integer.class))).thenReturn(testDomHtml);
+        Element originalGasStations = originalGasStationsElements.get(0);
         //WHEN
-        List<Integer> innerIds = new ArrayList<>();
-        for (Element element : parser.getOriginalGasStations()) {
-            innerIds.add(parser.parseInnerId(element));
-        }
+        int innerId = parser.parseInnerId(originalGasStations);
         //THEN
-        assertThat(innerIds, hasSize(1));
-        assertThat(innerIds, hasItem(TEST_INNER_ID));
+        assertThat(innerId, is(TESTED_INNER_ID));
     }
 
-    @Test
-    public void shouldSuccessfullyParseGasStations() throws Exception {
-        //GIVEN
-        PowerMockito.when(Jsoup.parse(any(URL.class), any(Integer.class))).thenReturn(fullDomHtml);
-        //WHEN
-        List<GasStation> gasStations = parser.parseGasStations();
-        //THEN
-        assertThat(gasStations, hasSize(WOG_STATION_COUNT));
-    }
+//    @Test
+//    public void shouldSuccessfullyParseGasStations() throws Exception {
+//        //GIVEN
+//        PowerMockito.when(Jsoup.parse(any(URL.class), any(Integer.class))).thenReturn(fullDomHtml);
+//        //WHEN
+//        List<GasStation> gasStations = parser.parseGasStations();
+//        //THEN
+//        assertThat(gasStations, hasSize(WOG_STATION_COUNT));
+//    }
 
 
-    @Test
-    public void shouldReturnOriginalGasStations() throws Exception {
-        //GIVEN
-        PowerMockito.when(Jsoup.parse(any(URL.class), any(Integer.class))).thenReturn(fullDomHtml);
-        //WHEN
-        List<Element> originalGasStations = parser.getOriginalGasStations();
-        //THEN
-        assertThat("Count of parsed origin gas station wrong", originalGasStations, hasSize(WOG_STATION_COUNT));
-    }
+//    @Test
+//    public void shouldReturnOriginalGasStations() throws Exception {
+//        //GIVEN
+//        PowerMockito.when(Jsoup.parse(any(URL.class), any(Integer.class))).thenReturn(fullDomHtml);
+//        //WHEN
+//        List<Element> originalGasStations = parser.getOriginalGasStations();
+//        //THEN
+//        assertThat("Count of parsed origin gas station wrong", originalGasStations, hasSize(WOG_STATION_COUNT));
+//    }
 
-    private List<Fuel> getTestFuelList() {
-        List<Fuel> fuels = new ArrayList<>();
-        Fuel a95 = new Fuel();
-        a95.setType(FuelType.A_95);
-        Fuel mustang95 = new Fuel();
-        mustang95.setType(FuelType.MUSTANG_95);
-        Fuel mustangDt = new Fuel();
-        mustangDt.setType(FuelType.MUSTANG_DT);
-        Fuel mustangDtPlus = new Fuel();
-        mustangDtPlus.setType(FuelType.MUSTANG_DT_PLUS);
-        fuels.addAll(Arrays.asList(a95, mustang95, mustangDt, mustangDtPlus));
-        return fuels;
+    private List<Fuel> getTestFuels() {
+        return Arrays.asList(new Fuel(A_95, "26,99"),
+                new Fuel(MUSTANG_92, "25,99"),
+                new Fuel(MUSTANG_DT, "23,99"),
+                new Fuel(MUSTANG_DT_PLUS, "24,99")
+        );
     }
 
     private Address getTestAddress() {
@@ -177,5 +158,10 @@ public class WogParserTest {
                 new Service(FUEL_CARDS),
                 new Service(INSURANCE)
         );
+    }
+
+    private String getHtmlByPath(String path) throws IOException {
+        URL url = getClass().getResource(path);
+        return Resources.toString(url, UTF_8);
     }
 }

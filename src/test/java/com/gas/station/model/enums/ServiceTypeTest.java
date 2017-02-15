@@ -1,11 +1,11 @@
 package com.gas.station.model.enums;
 
-import com.gas.station.exception.ConvertTypeException;
+import com.gas.station.exception.ResolveTypeException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static com.gas.station.exception.ConvertTypeException.message;
+import static com.gas.station.exception.ResolveTypeException.message;
 import static com.gas.station.model.enums.ServiceType.WASHING;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -30,7 +30,7 @@ public class ServiceTypeTest {
         //GIVEN
         String name = "Чистка Зубов";
         //THEN
-        exceptions.expect(ConvertTypeException.class);
+        exceptions.expect(ResolveTypeException.class);
         exceptions.expectMessage(message + name);
         //WHEN
         ServiceType serviceType = ServiceType.getTypeByName(name);

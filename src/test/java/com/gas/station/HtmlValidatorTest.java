@@ -9,7 +9,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class HtmlValidatorTest {
 
-    private static final String INVALID_HTML = "/wog/invalidFuelAndPricesHtml.html";
+    private static final String INVALID_HTML = "/wog/fuelAndPrices.html";
 
     @Test
     public void sholdValidateHtml() throws Exception {

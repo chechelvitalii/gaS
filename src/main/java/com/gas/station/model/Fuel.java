@@ -4,14 +4,13 @@ import com.gas.station.model.enums.FuelType;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
-import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
 @Table(name = "fuel")
 @Getter
 @Setter
+@EqualsAndHashCode()
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class Fuel {
@@ -28,8 +27,10 @@ public class Fuel {
     @Column(nullable = false)
     private FuelType type;
 
+    @NonNull
     @Column(nullable = false)
-    @Digits(message = "Price should have format 999.99", integer = 3, fraction = 2)
-    private BigDecimal price;
+    //TODO BigDecimal
+//    @Digits(message = "Price should have format 999.99", integer = 3, fraction = 2)
+    private String price;
 
 }

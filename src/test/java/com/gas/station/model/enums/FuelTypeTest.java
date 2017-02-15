@@ -1,11 +1,11 @@
 package com.gas.station.model.enums;
 
-import com.gas.station.exception.ConvertTypeException;
+import com.gas.station.exception.ResolveTypeException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static com.gas.station.exception.ConvertTypeException.message;
+import static com.gas.station.exception.ResolveTypeException.message;
 import static com.gas.station.model.enums.FuelType.A_95;
 import static com.gas.station.model.enums.FuelType.getFuelTypeByName;
 import static org.hamcrest.Matchers.is;
@@ -31,7 +31,7 @@ public class FuelTypeTest {
         //GIVEN
         String name = "A-10050";
         //THEN
-        exceptions.expect(ConvertTypeException.class);
+        exceptions.expect(ResolveTypeException.class);
         exceptions.expectMessage(message + name);
         //WHEN
         FuelType fuelType = getFuelTypeByName(name);

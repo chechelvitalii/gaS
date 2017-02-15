@@ -1,11 +1,13 @@
 package com.gas.station.service.parser;
 
+import com.gas.station.HtmlValidator;
 import com.gas.station.exception.ElementParseException;
 import com.gas.station.model.Address;
 import com.gas.station.model.Fuel;
 import com.gas.station.model.Service;
 import com.gas.station.model.enums.FuelType;
 import com.gas.station.model.enums.ServiceType;
+import com.google.common.annotations.VisibleForTesting;
 import lombok.extern.log4j.Log4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -29,7 +31,8 @@ import static java.util.stream.Collectors.toList;
 @Component
 public class WogParser extends GasStationParser<Element> {
 
-    private static final String ITEM_SELECTOR = "li.driver_map_item";
+    @VisibleForTesting
+    public static final String ITEM_SELECTOR = "li.driver_map_item";
     private static final String INFO_SELECTOR = "div.info";
     private static final String ID_SELECTOR = "div.info span";
     private static final String SERVICES_SELECTOR = "div.services p";
@@ -85,35 +88,37 @@ public class WogParser extends GasStationParser<Element> {
 
     @Override
     protected List<Fuel> parseFuels(Element item) {
-        //TODO read prices from thi map
-        Map<String, String> fuelPrices = getFuelPrices(parseInnerId(item));
-
+        Map<FuelType, String> fuelPrices = getFuelPrices(parseInnerId(item));
         //A-95, 92 MUSTANG, ДП MUSTANG, ДП MUSTANG+
         String fuelBlock = item.getElementsByClass(FUELS_CLASS).stream()
                 .findFirst()
-                .orElseThrow(() -> new ElementParseException("Not found class=fuels in parse element"))
+                .orElseThrow(() -> new ElementParseException("Not found class=\"fuels\" in parse element"))
                 .text();
         return Arrays.stream(fuelBlock.split(FUEL_SEPARATOR))
                 .map(String::trim)
                 .map(fuelName -> FuelType.getFuelTypeByName(fuelName))
-                .map(fuelType -> new Fuel(fuelType))
+                .map(fuelType -> new Fuel(fuelType, fuelPrices.get(fuelType)))
                 .collect(toList());
     }
 
-    private Map<String, String> getFuelPrices(int id) {
-        Map<String, String> fuelAndPrices = new HashMap<>();
-        MultiValueMap<String, Object> uriVars = new LinkedMultiValueMap();
-        uriVars.put(STATION_ID, Collections.singletonList(id));
-        String fuelPricesHtml = restClient.postForObject(gasStationFuelPricesUrl, uriVars, String.class);
-
-        Document fuelPricesDomHtml = Jsoup.parse(fuelPricesHtml);
-        for (Element fuelAndPrice : fuelPricesDomHtml.select(FUELS_AND_PRICES)) {
+    private Map<FuelType, String> getFuelPrices(int id) {
+        Map<FuelType, String> fuelAndPrices = new HashMap<>();
+        String validHtml = HtmlValidator.validate(getFuelPricesHtml(id));
+        Elements fuelAndPricesElements = Jsoup.parse(validHtml).select(FUELS_AND_PRICES);
+        for (Element fuelAndPrice : fuelAndPricesElements) {
             String price = fuelAndPrice.getElementsByClass(PRICE).text();
-            String imgLogo = fuelAndPrice.select(IMG_LOGO).attr(SRC);
-            log.info("Price:"+price+", ImgLogo:"+imgLogo);
-
+            String detectValue = fuelAndPrice.select(IMG_LOGO).attr(SRC);
+            log.info("Price:" + price + ", Detect Value(ImgLogo):" + detectValue);
+            fuelAndPrices.put(FuelType.getFuelTypeByDetectValue(detectValue), price);
         }
         return fuelAndPrices;
+    }
+
+    private String getFuelPricesHtml(int id) {
+        MultiValueMap<String, Object> uriVars = new LinkedMultiValueMap();
+        uriVars.put(STATION_ID, Collections.singletonList(id));
+        return restClient.postForObject(gasStationFuelPricesUrl, uriVars, String.class);
+
     }
 
     @Override

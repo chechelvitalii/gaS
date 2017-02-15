@@ -1,6 +1,6 @@
 package com.gas.station.model.enums;
 
-import com.gas.station.exception.ConvertTypeException;
+import com.gas.station.exception.ResolveTypeException;
 import lombok.Getter;
 
 import java.util.Optional;
@@ -32,6 +32,6 @@ public enum ServiceType {
             }
         }
         return typeByName
-                .orElseThrow(() -> new ConvertTypeException(name));
+                .orElseThrow(() -> new ResolveTypeException(name));
     }
 }
