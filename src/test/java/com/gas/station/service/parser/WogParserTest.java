@@ -40,7 +40,6 @@ import static org.powermock.api.mockito.PowerMockito.when;
 public class WogParserTest {
 
     private static final String FULL_LIST_GAS_STATION_RESOURCE_PATH = "/wog/fullListGasStations.html";
-    private static final int TEST_STATION_COUNT = 411;
 
     private static final String LIST_WITH_ONE_GAS_STATION_RESOURCE_PATH = "/wog/listWithOneGasStation.html";
     private static final Integer TESTED_INNER_ID = 51573;

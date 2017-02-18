@@ -16,12 +16,13 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
 @Log4j
 @Component
 public class WogFuelPriceService {
     private static final String FUELS_AND_PRICES = "div#cost.map_pane.act ul.map_cost_list li";
 
-    private static final String STATION_ID = "STATION_ID";
+    private static final String STATION_ID = "id";
     private static final String PRICE = "price";
     private static final String IMG_LOGO = "span.cost_img_container span.cost_img_container_inner img.logo";
     private static final String SRC = "src";
@@ -50,6 +51,5 @@ public class WogFuelPriceService {
         MultiValueMap<String, Object> uriVars = new LinkedMultiValueMap();
         uriVars.put(STATION_ID, Collections.singletonList(id));
         return restClient.postForObject(gasStationFuelPricesUrl, uriVars, String.class);
-
     }
 }
