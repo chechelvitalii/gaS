@@ -7,11 +7,19 @@ import java.util.Optional;
 
 @Getter
 public enum ServiceType {
-    CAFE("WOG cafe"),
+    WOG_CAFE("WOG cafe"),
+    WOG_BURGER("WOG-бургер"),
+    WI_FI("Wi-Fi"),
     SHOP("Магазин"),
-    WASHING("Мойка"),
     PHONE("Телефон"),
+    WASHING("Мойка"),
+    AUTO_WASHING("Автомойка"),
     PARKING("Парковка"),
+    PARKING_2("Паркинг"),
+    TIR_PARKING("Паркинг большого транспорта"),
+    TIRE_PUMPING("Подкачка шин"),
+    CHARGER("Электро-заправка обычная"),
+    SUPERCHARGER("Электро-заправка скоростная (Supercharger)"),
     COUPONS("Талоны"),
     CREDIT_CARDS("Кредитные карты"),
     FUEL_CARDS("Топливные карты"),

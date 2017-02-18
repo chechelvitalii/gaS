@@ -13,7 +13,6 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 
 
-//TODO write it
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class WogParserIT {
@@ -24,8 +23,7 @@ public class WogParserIT {
     private WogParser wogParser;
 
     @Test
-    public void shouldSuccesfullyGetOriginalGasStations() throws Exception {
-        //GIVEN
+    public void shouldSuccessfullyParseGasStations() throws Exception {
         //WHEN
         List<GasStation> gasStations = wogParser.parseGasStations();
         //THEN
