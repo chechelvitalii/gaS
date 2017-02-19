@@ -27,9 +27,8 @@ public class WogFuelPriceService {
     private static final String IMG_LOGO = "span.cost_img_container span.cost_img_container_inner img.logo";
     private static final String SRC = "src";
 
-    //TODO make it configurable
-    @Value("${wog.station.fuelPrices.and.services:https://wog.ua/drivers/get-gaz-station-detail}")
-    private String gasStationFuelPricesUrl = "https://wog.ua/drivers/get-gaz-station-detail";
+    @Value("${station.wog.fuel.prices}")
+    private String gasStationFuelPricesUrl;
 
     @Autowired
     private RestTemplate restClient;

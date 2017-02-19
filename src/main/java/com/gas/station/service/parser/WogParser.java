@@ -38,10 +38,9 @@ public class WogParser extends GasStationParser<Element> {
     private static final String FUELS_CLASS = "fuels";
     private static final String FUEL_SEPARATOR = ",";
 
-    //TODO make it configurable
-    @Value("${wog.station.list:https://wog.ua/ru/map/list/}")
-    private String gasStationListUrl = "https://wog.ua/ru/map/list/";
-    @Value("${read.timeout:60000}")
+    @Value("${station.wog.list}")
+    private String gasStationListUrl;
+    @Value("${app.connection.timeout}")
     private int timeOut;
 
     @Autowired

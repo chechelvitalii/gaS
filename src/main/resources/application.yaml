@@ -1,10 +1,14 @@
+station:
+  wog:
+    list: https://wog.ua/ru/map/list/
+    fuel.prices: https://wog.ua/drivers/get-gaz-station-detail
+
 server:
   port: 7775
 
 app:
-  prop:
-    read:
-      timeout: 60000
+  connection:
+    timeout: 60000
 
 spring:
   h2:
@@ -29,3 +33,4 @@ spring:
       format_sql: true
 #    database-platform: H2
 #      show-sql: true
+
