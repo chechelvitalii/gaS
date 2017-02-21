@@ -23,7 +23,7 @@ public class Fuel {
     private List<PetrolStation> petrolStations;
 
     @NonNull
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private FuelType type;
 

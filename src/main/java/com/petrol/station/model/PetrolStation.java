@@ -2,18 +2,10 @@ package com.petrol.station.model;
 
 
 import com.petrol.station.model.enums.BrandType;
-
-import java.util.List;
+import lombok.*;
 
 import javax.persistence.*;
-
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import java.util.List;
 
 @Entity
 @Table(name = "petrol_station")
@@ -32,12 +24,12 @@ public class PetrolStation {
     private int innerId;
     @Column(nullable = false)
     private BrandType brandType;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "petrol_station_fuels",
             joinColumns = @JoinColumn(name = "petrol_station_id"),
             inverseJoinColumns = @JoinColumn(name = "fuel_id"))
     private List<Fuel> fuels;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "petrol_station_services",
             joinColumns = @JoinColumn(name = "petrol_station_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id"))
