@@ -1,6 +1,6 @@
 package com.petrol.station.service;
 
-import com.petrol.station.HtmlValidator;
+import com.petrol.station.util.HtmlValidator;
 import com.petrol.station.model.enums.FuelType;
 import lombok.extern.log4j.Log4j;
 import org.jsoup.Jsoup;

@@ -1,6 +1,7 @@
 package com.petrol.station;
 
 import com.google.common.io.Resources;
+import com.petrol.station.util.HtmlValidator;
 import org.junit.Test;
 
 import java.net.URL;

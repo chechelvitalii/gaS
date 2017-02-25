@@ -1,4 +1,4 @@
-package com.petrol.station;
+package com.petrol.station.util;
 
 import com.google.common.collect.ImmutableMap;
 import lombok.experimental.UtilityClass;
