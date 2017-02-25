@@ -16,9 +16,12 @@ public class PetrolStationFacade {
     @Autowired
     private WogParser wogParser;
 
-    //TODO count updated station ?
-    public void updatePetrolStationByType(BrandType brand) {
+    public List<PetrolStation> updateAllPetrolStations() {
         List<PetrolStation> petrolStations = wogParser.parsePetrolStations();
-        List<PetrolStation> saved = petrolStationRepository.save(petrolStations);
+        return petrolStationRepository.save(petrolStations);
+    }
+
+    public List<PetrolStation> getAllPetrolStations(){
+        return petrolStationRepository.findAll();
     }
 }

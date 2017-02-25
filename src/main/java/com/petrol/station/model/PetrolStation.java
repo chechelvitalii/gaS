@@ -14,7 +14,6 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class PetrolStation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -36,4 +35,15 @@ public class PetrolStation {
     private List<Service> services;
     @Embedded
     private Address address;
+
+    @Override
+    public String toString() {
+        return "\nPetrolStation:" +
+                "\n id=" + id +
+                "\n innerId=" + innerId +
+                "\n brandType=" + brandType +
+                "\n fuels=" + fuels +
+                "\n services=" + services +
+                "\n address=" + address;
+    }
 }

@@ -44,6 +44,7 @@ public abstract class PetrolStationParser<T> {
                         .innerId(parseInnerId(originalPetrolStation))
                         .brandType(brandType)
                         .build();
+                log.info(parsedPetrolStations);
                 parsedPetrolStations.add(petrolStation);
             }
         } catch (IOException ex) {

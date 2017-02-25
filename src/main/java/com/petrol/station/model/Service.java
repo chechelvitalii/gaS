@@ -27,4 +27,12 @@ public class Service {
     @Column(nullable = false)
     private ServiceType type;
 
+    @Override
+    public String toString() {
+        return "Service{" +
+                "id=" + id +
+                ", petrolStations=" + petrolStations +
+                ", type=" + type +
+                '}';
+    }
 }

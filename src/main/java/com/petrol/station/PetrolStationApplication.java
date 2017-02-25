@@ -25,7 +25,7 @@ public class PetrolStationApplication {
         return new RestTemplate();
     }
 
-    @Bean
+//    @Bean
     public CommandLineRunner demo(PetrolStationRepository petrolStationRepository, WogParser wogParser) {
         return (args) -> {
             List<PetrolStation> petrolStations = wogParser.parsePetrolStations();

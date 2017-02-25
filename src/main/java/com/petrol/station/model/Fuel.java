@@ -33,4 +33,13 @@ public class Fuel {
 //    @Digits(message = "Price should have format 999.99", integer = 3, fraction = 2)
     private String price;
 
+    @Override
+    public String toString() {
+        return "Fuel{" +
+                "id=" + id +
+                ", petrolStations=" + petrolStations +
+                ", type=" + type +
+                ", price='" + price + '\'' +
+                '}';
+    }
 }
