@@ -16,16 +16,16 @@ spring:
       enabled: true
 #Data Source with Log4JDBC
   datasource:
-    url: jdbc:log4jdbc:h2:mem:GS;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: net.sf.log4jdbc.DriverSpy
-    data-username: sa
-    data-password:
 #Data Source original
-#  datasource:
+#    url: jdbc:log4jdbc:h2:mem:GS;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+#    driver-class-name: net.sf.log4jdbc.DriverSpy
+#Data Source original
 #    url: jdbc:h2:mem:GS;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
 #    driver-class-name: org.h2.Driver
-#    data-username: sa
-#    data-password:
+    url: jdbc:h2:./petrols
+    driver-class-name: org.h2.Driver
+    data-username: sa
+    data-password:
   jpa:
     properties:
      hibernate:
