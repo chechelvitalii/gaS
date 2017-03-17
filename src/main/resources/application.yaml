@@ -11,9 +11,9 @@ app:
     timeout: 60000
 
 spring:
-  h2:
-    console:
-      enabled: true
+#  h2:
+#    console:
+#      enabled: true
 #Data Source with Log4JDBC
   datasource:
 #Data Source original
@@ -22,15 +22,17 @@ spring:
 #Data Source original
 #    url: jdbc:h2:mem:GS;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
 #    driver-class-name: org.h2.Driver
-    url: jdbc:h2:./petrols
-    driver-class-name: org.h2.Driver
-    data-username: sa
-    data-password:
+    url: jdbc:mysql://127.0.0.1:3306/petrol?createDatabaseIfNotExist=true&allowMultiQueries=true&useUnicode=true&characterEncoding=utf-8&verifyServerCertificate=false&useSSL=true
+    driver-class-name: com.mysql.jdbc.Driver
+    username: admin
+    password: admin
   jpa:
-    properties:
-     hibernate:
-      enable_lazy_load_no_trans: true
-      format_sql: true
+#    properties:
+#     hibernate:
+#      enable_lazy_load_no_trans: true
+#      format_sql: true
+    generate-ddl: true
+    show-sql: true
 #    database-platform: H2
 #      show-sql: true
 
