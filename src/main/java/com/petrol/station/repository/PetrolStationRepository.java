@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PetrolStationRepository extends JpaRepository<PetrolStation,Integer> {
+    PetrolStation findById(int id);
 }

@@ -36,14 +36,14 @@ public class PetrolStation {
     @Embedded
     private Address address;
 
-    @Override
-    public String toString() {
-        return "\nPetrolStation:" +
-                "\n id=" + id +
-                "\n innerId=" + innerId +
-                "\n brandType=" + brandType +
-                "\n fuels=" + fuels +
-                "\n services=" + services +
-                "\n address=" + address;
-    }
+//    @Override
+//    public String toString() {
+//        return "\nPetrolStation:" +
+//                "\n id=" + id +
+//                "\n innerId=" + innerId +
+//                "\n brandType=" + brandType +
+//                "\n fuels=" + fuels +
+//                "\n services=" + services +
+//                "\n address=" + address;
+//    }
 }
